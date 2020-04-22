@@ -17,12 +17,17 @@ const config: configType = {
 app.post('/publipost', asyncMiddleware(async (req, res) => {
     if (!config.minio) {
         return res.status(402).send({ error: true });
+    } try {
+        const data: reqPubli = req.body;
+        const rendered = db.renderTemplate(data.template_name, data.data);
+        // could have some abstraction here
+        await config.minio.putObject(data.output_bucket, data.output_name, rendered);
+        res.send({ error: false });
+    } catch (e) {
+        console.log(e);
+        res.send({ error: true });
     }
-    const data: reqPubli = req.body;
-    const rendered = db.renderTemplate(data.template_name, data.data);
-    // could have some abstraction here
-    await config.minio.putObject(data.output_bucket, data.output_name, rendered);
-    res.send({ error: false });
+
 }));
 
 
@@ -91,7 +96,7 @@ app.post('/configure', asyncMiddleware(async (req, res) => {
         res.status(200).send({ error: false });
     } catch (e) {
         config.minio = undefined;
-        res.status(402).send({ error: true});
+        res.status(402).send({ error: true });
         console.error(e);
     }
 }));
