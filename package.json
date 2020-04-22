@@ -1,0 +1,37 @@
+{
+    "name": "excel_publiposting",
+    "version": "1.0.0",
+    "description": "",
+    "main": "start.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "tsc && node build/start.js 3003",
+        "build": "tsc",
+        "build:prod": "CI=true tsc"
+    },
+    "author": "Plawn",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/blob-to-buffer": "^1.2.0",
+        "@types/express": "^4.17.1",
+        "@types/minio": "^7.0.3",
+        "@types/mz": "0.0.32",
+        "tslint": "^5.20.0",
+        "typescript": "^3.6.3"
+    },
+    "dependencies": {
+        "@types/lodash": "^4.14.150",
+        "@types/pizzip": "^3.0.1",
+        "angular-expressions": "^1.1.1",
+        "babel-polyfill": "^6.26.0",
+        "blob-to-buffer": "^1.2.8",
+        "docxtemplater": "3.17.6",
+        "express": "^4.17.1",
+        "is-blob": "^2.0.1",
+        "lodash": "^4.17.15",
+        "minio": "^7.0.12",
+        "mz": "^2.7.0",
+        "pizzip": "^3.0.6",
+        "to-array-buffer": "^3.2.0"
+    }
+}

@@ -1,0 +1,104 @@
+var PizZip = require('pizzip');
+var Docxtemplater = require('docxtemplater');
+var fs = require('fs');
+var path = require('path');
+
+// console.log('deb', pptxTemplaterModule);
+
+const input_filename = 'example.pptx'
+
+
+// Please make sure to use angular-expressions 1.0.1 or later
+// More detail at https://github.com/open-xml-templating/docxtemplater/issues/488
+var expressions = require('angular-expressions');
+var merge = require("lodash/merge");
+// define your filter functions here, for example, to be able to write {clientname | lower}
+expressions.filters.lower = function (input) {
+    // This condition should be used to make sure that if your input is undefined, your output will be undefined as well and will not throw an error
+    if (!input) return input;
+    return input.toLowerCase();
+}
+function angularParser(tag) {
+    if (tag === '.') {
+        return {
+            get: function (s) { return s; }
+        };
+    }
+    const expr = expressions.compile(
+        tag.replace(/(’|‘)/g, "'").replace(/(“|”)/g, '"')
+    );
+    return {
+        get: function (scope, context) {
+            let obj = {};
+            const scopeList = context.scopeList;
+            const num = context.num;
+            for (let i = 0, len = num + 1; i < len; i++) {
+                obj = merge(obj, scopeList[i]);
+            }
+            return expr(scope, obj);
+        }
+    };
+}
+
+
+// The error object contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
+function replaceErrors(key, value) {
+    if (value instanceof Error) {
+        return Object.getOwnPropertyNames(value).reduce(function (error, key) {
+            error[key] = value[key];
+            return error;
+        }, {});
+    }
+    return value;
+}
+
+function errorHandler(error) {
+    console.log(JSON.stringify({ error: error }, replaceErrors));
+
+    if (error.properties && error.properties.errors instanceof Array) {
+        const errorMessages = error.properties.errors.map(function (error) {
+            return error.properties.explanation;
+        }).join("\n");
+        console.log('errorMessages', errorMessages);
+        // errorMessages is a humanly readable message looking like this :
+        // 'The tag beginning with "foobar" is unopened'
+    }
+    throw error;
+}
+
+//Load the docx file as a binary
+var content = fs.readFileSync(path.resolve(__dirname, input_filename), 'binary');
+
+var zip = new PizZip(content);
+var doc;
+try {
+    doc = new Docxtemplater(zip, { 
+        parser: angularParser ,
+        delimiters:{
+            start:'{{',
+            end:'}}'
+        }
+    });
+} catch (error) {
+    // Catch compilation errors (errors caused by the compilation of the template : misplaced tags)
+    errorHandler(error);
+}
+
+//set the templateVariables
+doc.setData({
+    mission: {
+        company: {
+            name: 'DEEEB'
+        }
+    },
+    last_name: 'Doe',
+    phone: '0652455478',
+    description: 'New Website'
+});
+
+doc.render()
+
+var buf = doc.getZip().generate({ type: 'nodebuffer' });
+
+// buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+fs.writeFileSync(path.resolve(__dirname, 'output.pptx'), buf);
