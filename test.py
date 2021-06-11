@@ -2,7 +2,7 @@ import requests
 
 url = 'http://localhost:3003'
 
-template_name = 'ppt1.pptx'
+template_name = 'PRO-ppt.pptx'
 
 def configure():
     t = {
@@ -19,7 +19,7 @@ def configure():
 def load_templates():
     print('trying to load')
     t = [
-        {'bucket_name': 'new-templates', 'template_name': template_name, 'exposed_as':template_name}
+        {'bucket_name': 'ppp', 'template_name': template_name, 'exposed_as':template_name}
     ]
 
     res = requests.post(url+'/load_templates', json=t)
@@ -37,6 +37,9 @@ def publipost():
                     'name':'DEM NAME'
                 }
             },
+            'document':{
+                'reference':'JEB'
+            }
         },
         'output_bucket': 'temporary',
         'output_name': 'test.pptx'
