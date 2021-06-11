@@ -22,7 +22,7 @@
     "dependencies": {
         "@types/lodash": "^4.14.150",
         "@types/pizzip": "^3.0.1",
-        "angular-expressions": "^1.1.1",
+        "angular-expressions": "^1.1.2",
         "babel-polyfill": "^6.26.0",
         "blob-to-buffer": "^1.2.8",
         "docxtemplater": "3.17.6",
