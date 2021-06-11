@@ -28,7 +28,7 @@
         "docxtemplater": "3.17.6",
         "express": "^4.17.1",
         "is-blob": "^2.0.1",
-        "lodash": "^4.17.15",
+        "lodash": "^4.17.21",
         "minio": "^7.0.12",
         "mz": "^2.7.0",
         "petit_nodejs_publipost_connector": "^1.0.0",
