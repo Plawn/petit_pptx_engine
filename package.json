@@ -26,7 +26,7 @@
         "babel-polyfill": "^6.26.0",
         "blob-to-buffer": "^1.2.8",
         "docxtemplater": "3.17.6",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "is-blob": "^2.0.1",
         "lodash": "^4.17.21",
         "minio": "^7.0.12",
